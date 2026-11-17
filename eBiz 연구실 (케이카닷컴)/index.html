@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eBiz 연구실 (케이카닷컴) | e-biz실 데이터랩</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg-deep: #070b14;
+      --bg-surface: #0f172a;
+      --bg-card: rgba(17, 25, 45, 0.82);
+      --bg-card-hover: rgba(25, 37, 66, 0.95);
+      --border: rgba(148, 163, 184, 0.16);
+      --border-accent: rgba(56, 189, 248, 0.45);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-red: #e52528;
+      --accent-violet: #818cf8;
+      --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.13), transparent 42%),
+                  radial-gradient(circle at 85% 10%, rgba(229, 37, 40, 0.11), transparent 38%),
+                  var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 11, 20, 0.86);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+    }
+
+    .topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--border-accent);
+      transform: translateX(-2px);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .gh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.13);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+
+    .gh-btn:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.75));
+      padding: 36px;
+      margin-bottom: 32px;
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(129, 140, 248, 0.16);
+      border: 1px solid rgba(129, 140, 248, 0.35);
+      color: #a5b4fc;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      font-size: clamp(24px, 3.2vw, 34px);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      margin-bottom: 10px;
+    }
+
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+      max-width: 680px;
+    }
+
+    .hero-visual {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 10;
+      background: #0b1324;
+    }
+
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    .proto-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 26px;
+      border-radius: 20px;
+      background: linear-gradient(155deg, rgba(20, 30, 56, 0.92), rgba(13, 20, 38, 0.88));
+      border: 1px solid rgba(129, 140, 248, 0.28);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.22s ease;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+    }
+
+    .proto-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.14);
+    }
+
+    .proto-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .proto-tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(229, 37, 40, 0.18);
+      border: 1px solid rgba(229, 37, 40, 0.42);
+      color: #fca5a5;
+    }
+
+    .proto-tag.blue {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.38);
+      color: #7dd3fc;
+    }
+
+    .proto-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .proto-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .proto-hint {
+      margin-top: 12px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .proto-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .count-pill {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .file-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .file-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .file-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .file-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      flex-shrink: 0;
+    }
+
+    .file-name {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      word-break: break-all;
+      margin-bottom: 4px;
+    }
+
+    .file-meta {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .file-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 24px;
+      border-radius: 20px;
+      border: 1px dashed rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    .guide-box {
+      margin-top: 36px;
+      padding: 22px 24px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.68);
+      border: 1px solid var(--border);
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .guide-box h3 {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 8px;
+    }
+
+    .guide-box ol {
+      padding-left: 18px;
+      display: grid;
+      gap: 5px;
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 12.5px;
+      color: #7dd3fc;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 24px 16px 64px; }
+      .hero-card, .featured-grid { grid-template-columns: 1fr; }
+      .hero-card { padding: 24px 20px; }
+      .topbar { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="../index.html" class="back-btn">← e-biz실 데이터랩 메인으로</a>
+      <div class="topbar-right">
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid rgba(148,163,184,0.24);">
+          <span style="font-size:10px;font-weight:800;letter-spacing:0.14em;color:#94a3b8;text-transform:uppercase;">Curated by</span>
+          <span style="font-size:12.5px;font-weight:900;background:linear-gradient(135deg,#fff 20%,#7dd3fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Ji-Su, Kim</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-card">
+      <div>
+        <span class="badge">CATEGORY 03 · eBiz R&amp;D LAB (KCAR.COM)</span>
+        <h1 class="hero-title">eBiz 연구실 (케이카닷컴)</h1>
+        <p class="hero-desc">
+          케이카닷컴 신규 서비스 프로토타입 목업, AI 매입·통합검색 UX 샘플 및 수시 전략 리서치 산출물을 제공하는 통합 연구실입니다.
+        </p>
+      </div>
+      <div class="hero-visual">
+        <img src="../assets/images/cat-archive.jpg" alt="eBiz 연구실 (케이카닷컴) 비주얼" onerror="this.style.display='none'" />
+      </div>
+    </section>
+
+    <!-- 핵심 프로토타입 / 목업 바로가기 -->
+    <div class="section-label">Featured Prototypes &amp; Mockups</div>
+    <section class="featured-grid" aria-label="핵심 목업 프로젝트">
+      <a href="https://jisukim-pokju82.github.io/buythecar/" target="_blank" rel="noopener" class="proto-card">
+        <div>
+          <div class="proto-badge-row">
+            <span class="proto-tag">AI MOCKUP · SMART PURCHASE</span>
+            <span style="font-size:12px;color:var(--text-muted);">PC / Mobile 지원</span>
+          </div>
+          <h2 class="proto-title">🚗 AI Car Purchase System Mockup (케이카 AI매입시스템)</h2>
+          <p class="proto-desc">
+            중고차 직영 매입을 위한 AI 사전 진단(차종별 고질병·점검 포인트), 엔카·케이카 실시간 시세 비교 및 인터랙티브 매입가격 산정 모바일 웹 플랫폼 프로토타입입니다.
+          </p>
+          <div class="proto-hint">
+            💡 데모 테스트 안내: 사번 <code>1111</code> / 비밀번호 <code>1111</code> (원클릭 자동 로그인 지원) → 차량번호 <code>11가1111</code>
+          </div>
+        </div>
+        <div class="proto-footer">
+          <span>AI Car Purchase System Mockup 실행하기</span>
+          <span>↗</span>
+        </div>
+      </a>
+
+      <a href="https://jisukim-pokju82.github.io/kcar-c2c-all-search/" target="_blank" rel="noopener" class="proto-card">
+        <div>
+          <div class="proto-badge-row">
+            <span class="proto-tag blue">UX SAMPLE · C2C SEARCH</span>
+            <span style="font-size:12px;color:var(--text-muted);">Mobile UI 샘플</span>
+          </div>
+          <h2 class="proto-title">📱 케이카 안심직거래 × 세상의 모든 직거래 통합검색 샘플</h2>
+          <p class="proto-desc">
+            케이카닷컴 모바일 환경에서 안심직거래 매물과 외부 플랫폼 직거래 매물을 한눈에 비교·탐색하는 통합검색 UX 모바일 프로토타입입니다.
+          </p>
+          <div class="proto-hint">
+            💡 모바일 최적화 뷰포트로 즉시 실행되며 PC 브라우저에서도 모바일 프레임으로 확인 가능합니다.
+          </div>
+        </div>
+        <div class="proto-footer">
+          <span>모바일 통합검색 샘플 실행하기</span>
+          <span>↗</span>
+        </div>
+      </a>
+    </section>
+
+    <!-- 폴더 내 전체 파일 자동 인덱싱 -->
+    <div class="section-label">All Lab Files &amp; Reports</div>
+    <div class="toolbar-row">
+      <div class="search-box">
+        <input type="search" id="searchInput" class="search-input" placeholder="연구실 파일명 또는 확장자 검색..." />
+      </div>
+      <div class="count-pill" id="fileCountLabel">연구실 파일 스캔 중...</div>
+    </div>
+
+    <div class="file-grid" id="fileGrid"></div>
+
+    <footer style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--text-muted);">
+      <span><strong>K Car e-biz실 데이터랩</strong> · eBiz 연구실 (케이카닷컴)</span>
+      <span>Directed &amp; Curated by <strong style="color:#f8fafc;">Ji-Su, Kim</strong></span>
+    </footer>
+  </main>
+
+  <script>
+    const OWNER = 'kcar-ebiz';
+    const REPO = 'kcar-ebiz.github.io';
+    const FOLDER_NAME = 'eBiz 연구실 (케이카닷컴)';
+    const HIDDEN_FILES = new Set(['index.html', 'manifest.json', '.gitkeep', 'README_사용안내.md']);
+
+    function getIcon(name) {
+      const ext = (name.split('.').pop() || '').toLowerCase();
+      if (ext === 'html' || ext === 'htm') return { icon: '🧪', type: '웹 목업 / 리포트 (HTML)' };
+      if (ext === 'pdf') return { icon: '📕', type: '문서 (PDF)' };
+      if (['csv', 'xlsx', 'xls'].includes(ext)) return { icon: '📈', type: '데이터 시트' };
+      if (['ppt', 'pptx'].includes(ext)) return { icon: '📑', type: '프레젠테이션' };
+      if (['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(ext)) return { icon: '🖼️', type: '이미지 자료' };
+      if (ext === 'md' || ext === 'txt') return { icon: '📝', type: '노트 / 안내문' };
+      return { icon: '📁', type: ext ? ext.toUpperCase() + ' 파일' : '첨부 자료' };
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || isNaN(bytes)) return '-';
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    let allFiles = [];
+
+    function renderFiles(query = '') {
+      const grid = document.getElementById('fileGrid');
+      const countLabel = document.getElementById('fileCountLabel');
+      const q = query.trim().toLowerCase();
+      const filtered = allFiles.filter(f => !q || f.name.toLowerCase().includes(q));
+
+      countLabel.textContent = `폴더 내 등록 파일 총 ${filtered.length}건`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size:17px;font-weight:800;margin-bottom:6px;">검색 조건에 맞는 파일이 없습니다.</div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(file => {
+        const meta = getIcon(file.name);
+        const href = './' + encodeURIComponent(file.name);
+        const updatedText = file.updatedAt ? ` · ${file.updatedAt}` : '';
+        return `
+          <a class="file-card" href="${href}" target="_blank" rel="noopener">
+            <div class="file-top">
+              <div class="file-icon">${meta.icon}</div>
+              <div>
+                <div class="file-name">${file.name}</div>
+                <div class="file-meta">${meta.type} · ${formatBytes(file.size)}${updatedText}</div>
+              </div>
+            </div>
+            <div class="file-footer">
+              <span>바로 열기 / 실행</span>
+              <span>→</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    async function loadArchive() {
+      const merged = new Map();
+
+      try {
+        const res = await fetch('./manifest.json?t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          (data.files || []).forEach(f => {
+            if (!HIDDEN_FILES.has(f.name)) merged.set(f.name, f);
+          });
+        }
+      } catch (_) {}
+
+      try {
+        const apiRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(FOLDER_NAME)}`);
+        if (apiRes.ok) {
+          const items = await apiRes.json();
+          if (Array.isArray(items)) {
+            items.forEach(item => {
+              if (item.type === 'file' && !HIDDEN_FILES.has(item.name)) {
+                const prev = merged.get(item.name) || {};
+                merged.set(item.name, {
+                  name: item.name,
+                  size: item.size,
+                  updatedAt: prev.updatedAt || ''
+                });
+              }
+            });
+          }
+        }
+      } catch (_) {}
+
+      allFiles = Array.from(merged.values()).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+      renderFiles();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      renderFiles(e.target.value);
+    });
+
+    loadArchive();
+  </script>
+</body>
+</html>

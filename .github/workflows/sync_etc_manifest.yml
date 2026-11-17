@@ -1,0 +1,56 @@
+name: Sync eBiz 연구실 Manifest
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'eBiz 연구실 (케이카닷컴)/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Rebuild eBiz 연구실 (케이카닷컴)/manifest.json
+        run: |
+          python3 - << 'EOF'
+          import json, os, datetime
+
+          folder = "eBiz 연구실 (케이카닷컴)"
+          hidden = {"index.html", "manifest.json", ".gitkeep", "README_사용안내.md"}
+          files = []
+          now_str = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d")
+
+          if os.path.isdir(folder):
+              for name in sorted(os.listdir(folder)):
+                  full = os.path.join(folder, name)
+                  if os.path.isfile(full) and name not in hidden:
+                      files.append({
+                          "name": name,
+                          "size": os.path.getsize(full),
+                          "updatedAt": now_str
+                      })
+
+          manifest = {
+              "updatedAt": now_str,
+              "files": files
+          }
+          with open(os.path.join(folder, "manifest.json"), "w", encoding="utf-8") as f:
+              json.dump(manifest, f, ensure_ascii=False, indent=2)
+          EOF
+
+      - name: Commit updated manifest if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- "eBiz 연구실 (케이카닷컴)/manifest.json"; then
+            git add "eBiz 연구실 (케이카닷컴)/manifest.json"
+            git commit -m "chore(lab): auto-update eBiz 연구실 (케이카닷컴)/manifest.json [skip ci]"
+            git push
+          fi

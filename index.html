@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>e-biz실 데이터랩 | K Car Mobility Intelligence Portal</title>
+  <meta name="description" content="케이카 e-biz실 데이터랩 메인 포털 — 경쟁사 분석(C2C 직거래·바이크 직거래), 보증 개선(보증 2.0 TF), eBiz 연구실 (케이카닷컴) 통합 허브" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg-void: #050811;
+      --bg-base: #090e1c;
+      --bg-elevated: rgba(15, 23, 42, 0.78);
+      --bg-card: rgba(14, 21, 38, 0.86);
+      --bg-card-hover: rgba(20, 31, 56, 0.95);
+      --border-subtle: rgba(148, 163, 184, 0.14);
+      --border-strong: rgba(148, 163, 184, 0.28);
+      --text-white: #f8fafc;
+      --text-body: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --kcar-red: #e52528;
+      --kcar-red-glow: rgba(229, 37, 40, 0.35);
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.32);
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --violet: #818cf8;
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-void);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 15% -5%, rgba(56, 189, 248, 0.14), transparent 55%),
+        radial-gradient(ellipse 65% 45% at 88% 8%, rgba(229, 37, 40, 0.13), transparent 50%),
+        radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 28px 28px;
+      color: var(--text-white);
+      line-height: 1.55;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    /* =========================================================
+       1. STICKY GLOBAL HEADER (PC / MOBILE VIEW SWITCHER)
+    ========================================================= */
+    .global-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5, 8, 17, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .global-nav-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--kcar-red) 0%, #991b1b 100%);
+      box-shadow: 0 0 22px var(--kcar-red-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: -0.04em;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-kicker {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text-white);
+      line-height: 1.25;
+    }
+
+    .nav-menu-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-jump-link {
+      padding: 8px 15px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-body);
+      text-decoration: none;
+      transition: all 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-jump-link:hover {
+      color: var(--text-white);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-subtle);
+    }
+
+    .nav-right-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .curator-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.78));
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 14px rgba(0, 0, 0, 0.3);
+      white-space: nowrap;
+    }
+
+    .curator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .curator-role {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .curator-name {
+      font-size: 12.5px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #ffffff 20%, #7dd3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .view-mode-switch {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-strong);
+    }
+
+    .view-mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .view-mode-btn.active {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      color: var(--text-white);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    /* =========================================================
+       2. PORTAL SHELL & FORCE-MOBILE PREVIEW FRAME
+    ========================================================= */
+    .portal-shell {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 32px 28px 96px;
+      transition: max-width 0.28s cubic-bezier(0.22, 1, 0.36, 1), padding 0.28s ease;
+    }
+
+    body.force-mobile {
+      background-color: #02040a;
+    }
+
+    body.force-mobile .portal-shell {
+      max-width: 440px;
+      margin: 20px auto 96px;
+      padding: 18px 16px 90px;
+      background: var(--bg-base);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 34px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.78), 0 0 0 6px rgba(15, 23, 42, 0.65);
+    }
+
+    body.force-mobile .nav-menu-links,
+    body.force-mobile .curator-pill {
+      display: none;
+    }
+
+    /* =========================================================
+       3. HERO DATALAB COMMAND BANNER
+    ========================================================= */
+    .hero-banner {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: #070d1b;
+      min-height: 460px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      align-items: stretch;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+      margin-bottom: 28px;
+    }
+
+    .hero-bg-media {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+    }
+
+    .hero-bg-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.02);
+      transition: transform 0.7s ease;
+    }
+
+    .hero-banner:hover .hero-bg-media img {
+      transform: scale(1.06);
+    }
+
+    .hero-bg-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #070d1b 0%, rgba(7, 13, 27, 0.35) 35%, rgba(7, 13, 27, 0.1) 100%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      padding: 46px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 26px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(229, 37, 40, 0.16);
+      border: 1px solid rgba(229, 37, 40, 0.42);
+      color: #fca5a5;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .eyebrow-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 15.5px;
+      color: var(--text-body);
+      max-width: 560px;
+      line-height: 1.65;
+    }
+
+    .hero-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .hero-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--kcar-red), #b91c1c);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 26px rgba(229, 37, 40, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .hero-cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(229, 37, 40, 0.48);
+    }
+
+    .hero-cta-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-strong);
+      color: var(--text-white);
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+
+    .hero-cta-ghost:hover {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: var(--cyan);
+    }
+
+    /* Live Telemetry Ticker Strip */
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+
+    .telemetry-card {
+      background: rgba(13, 20, 38, 0.82);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .telemetry-card:hover {
+      border-color: rgba(56, 189, 248, 0.45);
+      background: rgba(18, 28, 52, 0.94);
+      transform: translateY(-2px);
+    }
+
+    .telemetry-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .telemetry-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.13);
+      color: var(--cyan);
+    }
+
+    .telemetry-val {
+      font-size: 23px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+    }
+
+    .telemetry-sub {
+      font-size: 11.5px;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* =========================================================
+       4. CATEGORY FILTER BAR & ENTRY HUB
+    ========================================================= */
+    .hub-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .hub-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hub-kicker {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .hub-title {
+      font-size: clamp(22px, 2.6vw, 30px);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.72);
+      color: var(--text-body);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .filter-tab:hover {
+      border-color: var(--border-strong);
+      color: var(--text-white);
+    }
+
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--cyan), #2563eb);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Category Section Blocks */
+    .category-section {
+      margin-bottom: 42px;
+      scroll-margin-top: 84px;
+    }
+
+    .category-section.hidden-by-filter {
+      display: none;
+    }
+
+    .cat-section-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .cat-section-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cat-num-badge {
+      padding: 4px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+    }
+
+    .cat-num-badge.red {
+      background: rgba(229, 37, 40, 0.16);
+      border-color: rgba(229, 37, 40, 0.4);
+      color: #fca5a5;
+    }
+
+    .cat-num-badge.violet {
+      background: rgba(129, 140, 248, 0.16);
+      border-color: rgba(129, 140, 248, 0.4);
+      color: #c7d2fe;
+    }
+
+    .cat-section-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .cat-section-caption {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Entry Card Grids */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .cards-grid-1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .entry-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.24s ease, box-shadow 0.24s ease;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .entry-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.55), 0 0 28px rgba(56, 189, 248, 0.14);
+    }
+
+    .entry-card.accent-red:hover {
+      border-color: rgba(229, 37, 40, 0.65);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.55), 0 0 28px rgba(229, 37, 40, 0.18);
+    }
+
+    .entry-card.accent-violet:hover {
+      border-color: rgba(129, 140, 248, 0.65);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.55), 0 0 28px rgba(129, 140, 248, 0.18);
+    }
+
+    .entry-card-wide {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      align-items: stretch;
+    }
+
+    .card-visual {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #080f1e;
+    }
+
+    .entry-card-wide .card-visual {
+      aspect-ratio: auto;
+      min-height: 270px;
+    }
+
+    .card-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .entry-card:hover .card-visual img {
+      transform: scale(1.06);
+    }
+
+    .card-visual-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 8, 17, 0.15) 0%, rgba(5, 8, 17, 0.78) 100%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px 18px;
+    }
+
+    .visual-chip {
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      background: rgba(7, 11, 20, 0.78);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f8fafc;
+    }
+
+    .visual-schedule {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #a7f3d0;
+    }
+
+    .card-body {
+      padding: 26px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      flex: 1;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      color: var(--text-white);
+    }
+
+    .card-desc {
+      font-size: 14.5px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    .platform-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .p-pill {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      color: var(--text-body);
+    }
+
+    .card-live-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 13px 15px;
+      border-radius: 13px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .metric-number {
+      font-size: 15.5px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-white);
+    }
+
+    .card-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      flex-wrap: wrap;
+    }
+
+    .enter-btn-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .entry-card.accent-red .enter-btn-text {
+      color: #f87171;
+    }
+
+    .entry-card.accent-violet .enter-btn-text {
+      color: #a5b4fc;
+    }
+
+    .arrow-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 15px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .entry-card:hover .arrow-circle {
+      transform: translateX(4px);
+      background: var(--cyan);
+      color: #050811;
+      border-color: var(--cyan);
+    }
+
+    .entry-card.accent-red:hover .arrow-circle {
+      background: var(--kcar-red);
+      color: #fff;
+      border-color: var(--kcar-red);
+    }
+
+    .entry-card.accent-violet:hover .arrow-circle {
+      background: var(--violet);
+      color: #050811;
+      border-color: var(--violet);
+    }
+
+    .sub-action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sub-link-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+
+    .sub-link-chip:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: var(--text-white);
+      border-color: var(--border-strong);
+    }
+
+    /* =========================================================
+       5. EXECUTIVE SIGNATURE FOOTER & MOBILE BOTTOM DOCK
+    ========================================================= */
+    .portal-footer {
+      margin-top: 48px;
+      padding: 26px 28px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(12, 19, 36, 0.88), rgba(8, 13, 26, 0.94));
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--kcar-red), var(--cyan), var(--violet));
+      opacity: 0.75;
+    }
+
+    .footer-brand-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 12.5px;
+      color: var(--text-dim);
+    }
+
+    .footer-brand-meta strong {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-body);
+      letter-spacing: -0.01em;
+    }
+
+    .footer-signature {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .sig-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .sig-divider {
+      width: 1px;
+      height: 13px;
+      background: rgba(148, 163, 184, 0.28);
+    }
+
+    .sig-author {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      background: linear-gradient(135deg, #ffffff 15%, #93c5fd 65%, #fca5a5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mobile-bottom-dock {
+      display: none;
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 420px;
+      z-index: 1200;
+      background: rgba(9, 14, 28, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 20px;
+      padding: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 7px 4px;
+      border-radius: 13px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.16s ease;
+    }
+
+    .dock-item:hover,
+    .dock-item.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--text-white);
+    }
+
+    .dock-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* =========================================================
+       7. RESPONSIVE + FORCE-MOBILE OVERRIDES
+    ========================================================= */
+    body.force-mobile .hero-banner,
+    body.force-mobile .cards-grid-2,
+    body.force-mobile .entry-card-wide {
+      grid-template-columns: 1fr;
+    }
+
+    body.force-mobile .hero-bg-media {
+      order: -1;
+      min-height: 200px;
+    }
+
+    body.force-mobile .hero-bg-media::after {
+      background: linear-gradient(180deg, rgba(7, 13, 27, 0.1) 20%, #070d1b 100%);
+    }
+
+    body.force-mobile .hero-content {
+      padding: 22px 20px 26px;
+    }
+
+    body.force-mobile .hero-title {
+      font-size: 28px;
+    }
+
+    body.force-mobile .telemetry-strip {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    body.force-mobile .telemetry-val {
+      font-size: 18px;
+    }
+
+    body.force-mobile .card-body {
+      padding: 20px;
+    }
+
+    body.force-mobile .card-title {
+      font-size: 19px;
+    }
+
+    body.force-mobile .cat-section-caption {
+      display: none;
+    }
+
+    body.force-mobile .mobile-bottom-dock {
+      display: grid;
+    }
+
+    @media (max-width: 980px) {
+      .nav-menu-links,
+      .curator-pill {
+        display: none;
+      }
+      .hero-banner,
+      .cards-grid-2,
+      .entry-card-wide {
+        grid-template-columns: 1fr;
+      }
+      .hero-bg-media {
+        order: -1;
+        min-height: 230px;
+      }
+      .hero-bg-media::after {
+        background: linear-gradient(180deg, rgba(7, 13, 27, 0.1) 25%, #070d1b 100%);
+      }
+      .hero-content {
+        padding: 26px 24px 30px;
+      }
+      .telemetry-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .global-nav-inner {
+        padding: 11px 16px;
+      }
+      .portal-shell {
+        padding: 18px 16px 96px;
+      }
+      .telemetry-val {
+        font-size: 18.5px;
+      }
+      .card-body {
+        padding: 20px 18px;
+      }
+      .card-live-metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+      .cat-section-caption {
+        display: none;
+      }
+      .mobile-bottom-dock {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       STICKY HEADER
+  ========================================================= -->
+  <header class="global-nav">
+    <div class="global-nav-inner">
+      <a href="#top" class="brand-cluster">
+        <div class="brand-symbol">e·D</div>
+        <div class="brand-text-wrap">
+          <span class="brand-kicker">K Car Mobility Intelligence</span>
+          <span class="brand-name">e-biz실 데이터랩</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu-links" aria-label="주요 카테고리 메뉴">
+        <a href="#cat-competitor" class="nav-jump-link">01 경쟁사 분석</a>
+        <a href="#cat-warranty" class="nav-jump-link">02 보증 개선</a>
+        <a href="#cat-etc" class="nav-jump-link">03 eBiz 연구실 (케이카닷컴)</a>
+      </nav>
+
+      <div class="nav-right-controls">
+        <div class="curator-pill" aria-label="Curated by Ji-Su, Kim">
+          <span class="curator-dot"></span>
+          <span class="curator-role">Curated by</span>
+          <span class="curator-name">Ji-Su, Kim</span>
+        </div>
+
+        <div class="view-mode-switch" role="group" aria-label="PC 및 모바일 화면 모드 전환">
+          <button type="button" class="view-mode-btn active" id="btnModePc" data-mode="pc">🖥 PC</button>
+          <button type="button" class="view-mode-btn" id="btnModeMobile" data-mode="mobile">📱 Mobile</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       MAIN PORTAL SHELL
+  ========================================================= -->
+  <main class="portal-shell" id="top">
+
+    <!-- 1. HERO DATALAB BANNER -->
+    <section class="hero-banner" aria-label="e-biz실 데이터랩 메인 배너">
+      <div class="hero-content">
+        <div>
+          <div class="hero-eyebrow-row">
+            <span class="eyebrow-chip">● e-biz DATA LAB HUB</span>
+            <span class="eyebrow-sub">CLOUD-NATIVE STRATEGY PORTAL</span>
+          </div>
+          <h1 class="hero-title">e-biz실 데이터랩</h1>
+          <p class="hero-desc">
+            모빌리티 C2C 직거래·바이크 시장 경쟁사 실시간 트래킹부터 케이카 보증 2.0 개편 전략, eBiz 연구실(케이카닷컴) 프로토타입 목업까지 하나로 연결한 <strong>e-biz실 통합 인텔리전스 메인 포털</strong>입니다.
+          </p>
+
+          <div class="hero-quick-actions">
+            <a href="#cat-competitor" class="hero-cta-primary">카테고리 바로 진입 ↓</a>
+            <a href="./warranty/index.html" class="hero-cta-ghost">🛡️ 보증 2.0 개편 보고</a>
+            <a href="./eBiz%20%EC%97%B0%EA%B5%AC%EC%8B%A4%20(%EC%BC%80%EC%9D%B4%EC%B9%B4%EB%8B%B7%EC%BB%B4)/index.html" class="hero-cta-ghost">🧪 eBiz 연구실 (케이카닷컴)</a>
+          </div>
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span>⚡ LIVE MARKET INTELLIGENCE</span>
+          <span>·</span>
+          <span id="heroSyncTimestamp">실시간 데이터 동기화 확인 중...</span>
+        </div>
+      </div>
+
+      <div class="hero-bg-media">
+        <img
+          src="./assets/images/hero-datalab.jpg"
+          alt="e-biz실 데이터랩 모빌리티 인텔리전스 히어로 비주얼"
+          width="1280"
+          height="720"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <!-- LIVE CLOUD PULSE STRIP -->
+    <section class="telemetry-strip" aria-label="카테고리 실시간 요약 지표">
+      <a href="https://jisukim-pokju82.github.io/c2c-car-trend-tracker/competitor_trend.html" class="telemetry-card">
+        <div class="telemetry-top">
+          <span>1-A. C2C 직거래 (4개사)</span>
+          <span class="telemetry-tag">08:00 AUTO</span>
+        </div>
+        <div class="telemetry-val" id="pulseCarTotal">40,715대</div>
+        <div class="telemetry-sub" id="pulseCarSub">당근·엔카·케이카·KB 실시간 연동</div>
+      </a>
+
+      <a href="https://jisukim-pokju82.github.io/c2c-bike-trend-tracker/" class="telemetry-card">
+        <div class="telemetry-top">
+          <span>1-B. 바이크 직거래 (5개사)</span>
+          <span class="telemetry-tag">10:00 AUTO</span>
+        </div>
+        <div class="telemetry-val" id="pulseBikeTotal">35,007대</div>
+        <div class="telemetry-sub" id="pulseBikeSub">당근·라이트바겐·파쏘·바튜매 연동</div>
+      </a>
+
+      <a href="./warranty/index.html" class="telemetry-card">
+        <div class="telemetry-top">
+          <span>2. 보증 개선 (Warranty 2.0)</span>
+          <span class="telemetry-tag" style="background:rgba(229,37,40,0.16);color:#fca5a5;">TF REPORT</span>
+        </div>
+        <div class="telemetry-val">보증 2.0 개편</div>
+        <div class="telemetry-sub">PART 1 &amp; 2 통합 슬라이드 (35P)</div>
+      </a>
+
+      <a href="./eBiz%20%EC%97%B0%EA%B5%AC%EC%8B%A4%20(%EC%BC%80%EC%9D%B4%EC%B9%B4%EB%8B%B7%EC%BB%B4)/index.html" class="telemetry-card">
+        <div class="telemetry-top">
+          <span>3. eBiz 연구실 (케이카닷컴)</span>
+          <span class="telemetry-tag" style="background:rgba(129,140,248,0.16);color:#c7d2fe;">R&amp;D LAB</span>
+        </div>
+        <div class="telemetry-val" id="pulseEtcCount">AI 목업 · 샘플</div>
+        <div class="telemetry-sub">AI매입시스템 · 직거래 통합검색</div>
+      </a>
+    </section>
+
+    <!-- =========================================================
+         2. CATEGORY ENTRY MENU HUB
+    ========================================================= -->
+    <div class="hub-header" id="category-hub">
+      <div class="hub-title-group">
+        <span class="hub-kicker">Category Navigation</span>
+        <h2 class="hub-title">데이터랩 카테고리 진입 메뉴</h2>
+      </div>
+
+      <div class="filter-tabs" role="tablist" aria-label="카테고리 필터">
+        <button type="button" class="filter-tab active" data-filter="all">전체 카테고리 (4)</button>
+        <button type="button" class="filter-tab" data-filter="competitor">1) 경쟁사 분석 (2)</button>
+        <button type="button" class="filter-tab" data-filter="warranty">2) 보증 개선 (1)</button>
+        <button type="button" class="filter-tab" data-filter="etc">3) eBiz 연구실 (케이카닷컴)</button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────
+         CATEGORY 1 : 경쟁사 분석 (C2C 직거래 / 바이크 직거래)
+    ────────────────────────────────────────────────────────── -->
+    <section class="category-section" id="cat-competitor" data-cat="competitor">
+      <div class="cat-section-bar">
+        <div class="cat-section-left">
+          <span class="cat-num-badge">CATEGORY 01</span>
+          <h3 class="cat-section-title">경쟁사 분석</h3>
+        </div>
+        <span class="cat-section-caption">C2C 승용 직거래 및 바이크 직거래 플랫폼 일별 매물·회전율 트래킹</span>
+      </div>
+
+      <div class="cards-grid-2">
+        <!-- 1-1. C2C 직거래 (당근 폴더 매물 현황보고 링크) -->
+        <a
+          href="https://jisukim-pokju82.github.io/c2c-car-trend-tracker/competitor_trend.html"
+          class="entry-card"
+        >
+          <div class="card-visual">
+            <img
+              src="./assets/images/cat-c2c-car.jpg"
+              alt="C2C 직거래 경쟁사 매물 현황보고 비주얼"
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-visual-overlay">
+              <span class="visual-chip">01-A · C2C 직거래</span>
+              <span class="visual-schedule">매일 08:00 KST 자동 수집</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <div class="card-title-row">
+                <h4 class="card-title">C2C 직거래 매물 현황보고</h4>
+              </div>
+              <p class="card-desc">
+                당근중고차를 비롯한 4대 중고차 플랫폼의 개인 직거래 등록대수 추이, 국산·수입 비중, 가격대 분포 및 개별 매물 RAW 데이터를 비교 분석합니다.
+              </p>
+              <div class="platform-pills">
+                <span class="p-pill">🥕 당근중고차</span>
+                <span class="p-pill">🚗 엔카 개인직거래</span>
+                <span class="p-pill">🛡️ 케이카 안심직거래</span>
+                <span class="p-pill">💛 KB차차차 직거래</span>
+              </div>
+            </div>
+
+            <div class="card-live-metrics">
+              <div class="metric-item">
+                <span class="metric-label">당근중고차</span>
+                <span class="metric-number" id="carMetricDaangn">37,829대</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">엔카 개인</span>
+                <span class="metric-number" id="carMetricEncar">2,512대</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">케이카 직거래</span>
+                <span class="metric-number" id="carMetricKcar">342대</span>
+              </div>
+            </div>
+
+            <div class="card-footer-bar">
+              <span class="enter-btn-text">당근·4대 플랫폼 매물 현황보고 진입</span>
+              <span class="arrow-circle">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 1-2. 바이크 직거래 (바이크 폴더 페이지 링크) -->
+        <a
+          href="https://jisukim-pokju82.github.io/c2c-bike-trend-tracker/"
+          class="entry-card"
+        >
+          <div class="card-visual">
+            <img
+              src="./assets/images/cat-c2c-bike.jpg"
+              alt="바이크 직거래 매물 현황보고 비주얼"
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-visual-overlay">
+              <span class="visual-chip">01-B · 바이크 직거래</span>
+              <span class="visual-schedule">매일 10:00 KST 자동 수집</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <div class="card-title-row">
+                <h4 class="card-title">바이크 직거래 매물 현황보고</h4>
+              </div>
+              <p class="card-desc">
+                당근 오토바이 직거래, 라이트바겐, 파쏘, 바튜매 등 5개 플랫폼 기준 배기량(300cc 미만/이상)·브랜드별 등록 매물과 일별 판매 회전율을 추적합니다.
+              </p>
+              <div class="platform-pills">
+                <span class="p-pill">🥕 당근 바이크</span>
+                <span class="p-pill">🏍️ 라이트바겐</span>
+                <span class="p-pill">⚡ 파쏘 바이크</span>
+                <span class="p-pill">🏁 바튜매 카페</span>
+                <span class="p-pill">🛡️ 케이카 (비교칸)</span>
+              </div>
+            </div>
+
+            <div class="card-live-metrics">
+              <div class="metric-item">
+                <span class="metric-label">라이트바겐</span>
+                <span class="metric-number" id="bikeMetricReit">11,555대</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">파쏘 중고</span>
+                <span class="metric-number" id="bikeMetricPasso">10,123대</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">당근 바이크</span>
+                <span class="metric-number" id="bikeMetricDaangn">8,069대</span>
+              </div>
+            </div>
+
+            <div class="card-footer-bar">
+              <span class="enter-btn-text">바이크 플랫폼 매물 현황보고 진입</span>
+              <span class="arrow-circle">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         CATEGORY 2 : 보증 개선 (보증2.0TF_보증개편보고_최최종_261110.html)
+    ────────────────────────────────────────────────────────── -->
+    <section class="category-section" id="cat-warranty" data-cat="warranty">
+      <div class="cat-section-bar">
+        <div class="cat-section-left">
+          <span class="cat-num-badge red">CATEGORY 02</span>
+          <h3 class="cat-section-title">보증 개선</h3>
+        </div>
+        <span class="cat-section-caption">케이카 보증 2.0 TF 개편 전략 및 UI/UX 개선 최종 보고</span>
+      </div>
+
+      <div class="cards-grid-1">
+        <a href="./warranty/index.html" class="entry-card entry-card-wide accent-red">
+          <div class="card-visual">
+            <img
+              src="./assets/images/cat-warranty.jpg"
+              alt="케이카 보증 2.0 개편 보고 비주얼"
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-visual-overlay">
+              <span class="visual-chip">02 · K Car WARRANTY 2.0 TF</span>
+              <span class="visual-schedule" style="background:rgba(229,37,40,0.28);border-color:rgba(248,113,113,0.5);color:#fecaca;">최최종 보고서 탑재</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <div class="card-title-row">
+                <h4 class="card-title">보증 개선 내용 (케이카 보증 2.0 개편 보고)</h4>
+              </div>
+              <p class="card-desc">
+                케이카 보증 2.0 개편 전략 PART 1 &amp; PART 2 통합 슬라이드 보고서입니다. 상품·요율 개편안 열람, 전체화면 발표 모드(F5), 인터랙티브 웹 안내 페이지 목업 및 PDF 인쇄를 즉시 실행할 수 있습니다.
+              </p>
+              <div class="platform-pills">
+                <span class="p-pill">📑 PART 1 · 보증 상품/요율 개편</span>
+                <span class="p-pill">🖥️ PART 2 · 안내 UI/UX 인터랙티브 목업</span>
+                <span class="p-pill">▶️ 전체화면 발표 모드 지원</span>
+              </div>
+            </div>
+
+            <div class="card-footer-bar">
+              <span class="enter-btn-text">보증 2.0 개편 보고서 열기</span>
+              <span class="arrow-circle">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="sub-action-row">
+        <a href="./warranty/보증2.0TF_보증개편보고_최최종_261110.html" target="_blank" rel="noopener" class="sub-link-chip">
+          🗔 보증 2.0 개편 보고서 새 창으로 열기
+        </a>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         CATEGORY 3 : eBiz 연구실 (케이카닷컴)
+    ────────────────────────────────────────────────────────── -->
+    <section class="category-section" id="cat-etc" data-cat="etc">
+      <div class="cat-section-bar">
+        <div class="cat-section-left">
+          <span class="cat-num-badge violet">CATEGORY 03</span>
+          <h3 class="cat-section-title">eBiz 연구실 (케이카닷컴)</h3>
+        </div>
+        <span class="cat-section-caption">케이카닷컴 신규 서비스 프로토타입·AI 목업 및 수시 리서치 연구실</span>
+      </div>
+
+      <div class="cards-grid-1">
+        <a href="./eBiz%20%EC%97%B0%EA%B5%AC%EC%8B%A4%20(%EC%BC%80%EC%9D%B4%EC%B9%B4%EB%8B%B7%EC%BB%B4)/index.html" class="entry-card entry-card-wide accent-violet">
+          <div class="card-visual">
+            <img
+              src="./assets/images/cat-archive.jpg"
+              alt="eBiz 연구실 (케이카닷컴) 비주얼"
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-visual-overlay">
+              <span class="visual-chip">03 · eBiz R&amp;D LAB</span>
+              <span class="visual-schedule" style="background:rgba(129,140,248,0.26);border-color:rgba(165,180,252,0.5);color:#e0e7ff;">케이카닷컴 신사업·목업</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div>
+              <div class="card-title-row">
+                <h4 class="card-title">eBiz 연구실 (케이카닷컴)</h4>
+              </div>
+              <p class="card-desc">
+                <strong>AI Car Purchase System Mockup (케이카 AI매입시스템)</strong>, <strong>세상의 모든 직거래 통합검색 모바일 샘플</strong> 등 케이카닷컴 신규 서비스 프로토타입과 전략 리서치 자료를 확인하실 수 있는 연구실입니다.
+              </p>
+              <div class="platform-pills">
+                <span class="p-pill">🚗 AI Car Purchase System Mockup</span>
+                <span class="p-pill">📱 세상의 모든 직거래 모바일 샘플</span>
+                <span class="p-pill">🧪 신규 UX · AI 프로토타입</span>
+              </div>
+            </div>
+
+            <div class="card-footer-bar">
+              <span class="enter-btn-text">eBiz 연구실 (케이카닷컴) 전체 보기</span>
+              <span class="arrow-circle">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="sub-action-row" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="https://jisukim-pokju82.github.io/buythecar/" target="_blank" rel="noopener" class="sub-link-chip" style="border-color:rgba(56,189,248,0.48); background:rgba(56,189,248,0.14); color:#bae6fd; font-weight:800;">
+          🚗 AI Car Purchase System Mockup 바로가기 (케이카 AI매입시스템)
+        </a>
+        <a href="https://jisukim-pokju82.github.io/kcar-c2c-all-search/" target="_blank" rel="noopener" class="sub-link-chip" style="border-color:rgba(229,37,40,0.45); background:rgba(229,37,40,0.14); color:#fecaca; font-weight:800;">
+          📱 케이카 ‘세상의 모든 직거래’ 모바일 통합검색 샘플 바로가기
+        </a>
+      </div>
+    </section>
+
+    <footer class="portal-footer">
+      <div class="footer-brand-meta">
+        <strong>K Car e-biz실 데이터랩</strong>
+        <span>Mobility Intelligence &amp; Strategy Portal · PC / Mobile Unified</span>
+      </div>
+      <div class="footer-signature">
+        <span class="sig-label">Directed &amp; Curated by</span>
+        <span class="sig-divider"></span>
+        <span class="sig-author">Ji-Su, Kim</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- MOBILE QUICK BOTTOM DOCK -->
+  <nav class="mobile-bottom-dock" aria-label="모바일 하단 빠른 메뉴">
+    <a href="#top" class="dock-item active">
+      <span class="dock-icon">🏠</span>
+      <span>메인홈</span>
+    </a>
+    <a href="#cat-competitor" class="dock-item">
+      <span class="dock-icon">📊</span>
+      <span>경쟁사분석</span>
+    </a>
+    <a href="./warranty/index.html" class="dock-item">
+      <span class="dock-icon">🛡️</span>
+      <span>보증개선</span>
+    </a>
+    <a href="./eBiz%20%EC%97%B0%EA%B5%AC%EC%8B%A4%20(%EC%BC%80%EC%9D%B4%EC%B9%B4%EB%8B%B7%EC%BB%B4)/index.html" class="dock-item">
+      <span class="dock-icon">🧪</span>
+      <span>eBiz연구실</span>
+    </a>
+  </nav>
+
+  <script>
+    // 1. PC / Mobile 뷰 모드 전환 스위치
+    (function initViewMode() {
+      const btnPc = document.getElementById('btnModePc');
+      const btnMobile = document.getElementById('btnModeMobile');
+
+      function applyMode(mode) {
+        if (mode === 'mobile') {
+          document.body.classList.add('force-mobile');
+          btnMobile.classList.add('active');
+          btnPc.classList.remove('active');
+        } else {
+          document.body.classList.remove('force-mobile');
+          btnPc.classList.add('active');
+          btnMobile.classList.remove('active');
+        }
+        try { localStorage.setItem('ebiz_datalab_view_mode', mode); } catch (_) {}
+      }
+
+      btnPc.addEventListener('click', () => applyMode('pc'));
+      btnMobile.addEventListener('click', () => applyMode('mobile'));
+
+      try {
+        const saved = localStorage.getItem('ebiz_datalab_view_mode');
+        if (saved === 'mobile') applyMode('mobile');
+      } catch (_) {}
+    })();
+
+    // 2. 카테고리 탭 필터링
+    (function initCategoryFilter() {
+      const tabs = document.querySelectorAll('.filter-tab');
+      const sections = document.querySelectorAll('.category-section');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.filter;
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          sections.forEach(sec => {
+            if (target === 'all' || sec.dataset.cat === target) {
+              sec.classList.remove('hidden-by-filter');
+            } else {
+              sec.classList.add('hidden-by-filter');
+            }
+          });
+        });
+      });
+    })();
+
+    // 3. GitHub Pages 클라우드 실시간 지표 연동 (PC OFF 상태에서도 매일 자동 반영)
+    (async function syncLiveCloudMetrics() {
+      const fmt = n => (typeof n === 'number' && !isNaN(n)) ? n.toLocaleString('ko-KR') + '대' : '-';
+      let latestStamp = '';
+
+      // 3-A. C2C 직거래 (당근 등 4대 플랫폼)
+      try {
+        const carRes = await fetch('https://jisukim-pokju82.github.io/c2c-car-trend-tracker/competitor_trend.json?t=' + Date.now());
+        if (carRes.ok) {
+          const rows = await carRes.json();
+          if (Array.isArray(rows) && rows.length > 0) {
+            const last = rows[rows.length - 1];
+            const total = (last.daangnCarsCount || 0) + (last.encarPersonalCount || 0) + (last.kcarDirectCount || 0) + (last.kbDirectCount || 0);
+            document.getElementById('pulseCarTotal').textContent = fmt(total);
+            document.getElementById('pulseCarSub').textContent = `기준일 ${last.date} · 4개사 합산`;
+            document.getElementById('carMetricDaangn').textContent = fmt(last.daangnCarsCount);
+            document.getElementById('carMetricEncar').textContent = fmt(last.encarPersonalCount);
+            document.getElementById('carMetricKcar').textContent = fmt(last.kcarDirectCount);
+            latestStamp = last.updatedAt || last.date || '';
+          }
+        }
+      } catch (_) {}
+
+      // 3-B. 바이크 직거래 (5대 플랫폼)
+      try {
+        const bikeRes = await fetch('https://jisukim-pokju82.github.io/c2c-bike-trend-tracker/competitor_trend.json?t=' + Date.now());
+        if (bikeRes.ok) {
+          const rows = await bikeRes.json();
+          if (Array.isArray(rows) && rows.length > 0) {
+            const last = rows[rows.length - 1];
+            const total = (last.daangnBikeCount || 0) + (last.reitwagenCount || 0) + (last.passoCount || 0) + (last.batumaeCount || 0);
+            document.getElementById('pulseBikeTotal').textContent = fmt(total);
+            document.getElementById('pulseBikeSub').textContent = `기준일 ${last.date} · 활성 매물 합산`;
+            document.getElementById('bikeMetricReit').textContent = fmt(last.reitwagenCount);
+            document.getElementById('bikeMetricPasso').textContent = fmt(last.passoCount);
+            document.getElementById('bikeMetricDaangn').textContent = fmt(last.daangnBikeCount);
+            if (last.updatedAt && last.updatedAt > latestStamp) latestStamp = last.updatedAt;
+          }
+        }
+      } catch (_) {}
+
+      // 3-C. eBiz 연구실 (케이카닷컴) 파일 수 연동
+      try {
+        const etcRes = await fetch('./eBiz%20%EC%97%B0%EA%B5%AC%EC%8B%A4%20(%EC%BC%80%EC%9D%B4%EC%B9%B4%EB%8B%B7%EC%BB%B4)/manifest.json?t=' + Date.now());
+        if (etcRes.ok) {
+          const data = await etcRes.json();
+          const count = Array.isArray(data.files) ? data.files.length : 0;
+          document.getElementById('pulseEtcCount').textContent = `연구자료 ${count}건`;
+        }
+      } catch (_) {}
+
+      const syncEl = document.getElementById('heroSyncTimestamp');
+      if (latestStamp) {
+        syncEl.textContent = `최근 데이터 자동 갱신: ${latestStamp} KST`;
+      } else {
+        syncEl.textContent = '실시간 마켓 데이터 연동 완료';
+      }
+    })();
+  </script>
+</body>
+</html>
